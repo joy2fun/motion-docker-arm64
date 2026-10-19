@@ -1,8 +1,7 @@
 # -- build stage --
-FROM --platform=$BUILDPLATFORM debian:bookworm-slim AS builder
+FROM --platform=$TARGETPLATFORM debian:bookworm-slim AS builder
 
 ARG MOTION_VERSION=release-4.7.1
-ARG TARGETARCH
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
     ca-certificates \
@@ -42,7 +41,7 @@ RUN autoreconf -fiv && \
     make install DESTDIR=/install
 
 # -- runtime stage --
-FROM debian:bookworm-slim
+FROM --platform=$TARGETPLATFORM debian:bookworm-slim
 
 # Install the same dev packages — guaranteed to exist in Bookworm —
 # then strip headers/pkgconfig/manpages to keep the image lean.
