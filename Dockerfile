@@ -44,24 +44,27 @@ RUN autoreconf -fiv && \
 # -- runtime stage --
 FROM debian:bookworm-slim
 
+# Install the same dev packages — guaranteed to exist in Bookworm —
+# then strip headers/pkgconfig/manpages to keep the image lean.
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    libcamera0 \
-    libopencv-objdetect406 \
-    libavcodec59 \
-    libavdevice59 \
-    libavformat59 \
-    libavutil57 \
-    libswscale6 \
-    libwebp7 \
-    libmicrohttpd12 \
-    libmariadb3 \
-    libasound2 \
-    libpulse0 \
-    libfftw3-3 \
-    libsqlite3-0 \
-    libjpeg62-turbo \
-    zlib1g \
-    && rm -rf /var/lib/apt/lists/*
+    libcamera-dev \
+    libopencv-dev \
+    libavcodec-dev \
+    libavdevice-dev \
+    libavformat-dev \
+    libavutil-dev \
+    libswscale-dev \
+    libwebp-dev \
+    libmicrohttpd-dev \
+    libmariadb-dev \
+    libasound2-dev \
+    libpulse-dev \
+    libfftw3-dev \
+    libsqlite3-dev \
+    libjpeg-dev \
+    zlib1g-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /usr/include /usr/lib/*/pkgconfig /usr/share/man /usr/share/doc
 
 COPY --from=builder /install/usr/local /usr/local
 
